@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Configurar GC e Campanha</title>
+  <script src="https://unpkg.com/postmonger"></script>
+</head>
+<body>
+  <label>Percentual GC (%):</label><br>
+  <input type="number" id="percentualGC" value="10"><br><br>
+
+  <label>Nome Campanha:</label><br>
+  <input type="text" id="nomeCampanha"><br><br>
+
+  <button id="btnSave">Salvar</button>
+
+  <script>
+    const connection = new Postmonger.Session();
+    let payload = {};
+
+    connection.on('initActivity', data => {
+      payload = data;
+      const args = data.arguments?.execute?.inArguments?.[0] || {};
+      document.getElementById('percentualGC').value = args.PercentualGC || 10;
+      document.getElementById('nomeCampanha').value = args.NomeCampanha || '';
+    });
+
+    document.getElementById('btnSave').onclick = () => {
+      const percentualGC = parseFloat(document.getElementById('percentualGC').value);
+      const nomeCampanha = document.getElementById('nomeCampanha').value;
+
+      payload.arguments.execute.inArguments = [{
+        ContactKey: "{{Contact.Key}}",
+        PercentualGC: percentualGC,
+        NomeCampanha: nomeCampanha
+      }];
+
+      payload.metaData.isConfigured = true;
+      connection.trigger('updateActivity', payload);
+    };
+
+    connection.trigger('ready');
+  </script>
+</body>
+</html>
