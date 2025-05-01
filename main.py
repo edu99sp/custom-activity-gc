@@ -5,10 +5,13 @@ from jwt.algorithms import RSAAlgorithm
 app = Flask(__name__)
 
 # Ajuste com suas infos do SFMC
-CLIENT_ID = 'SEU_CLIENT_ID'
-CLIENT_SECRET = 'SEU_CLIENT_SECRET'
-AUTH_BASE_URL = 'https://SEU_SUBDOMAIN.auth.marketingcloudapis.com'
-DE_EXTERNAL_KEY = 'EXTERNAL_KEY_DA_SUA_DE'
+import os
+
+CLIENT_ID = os.environ.get('CLIENT_ID')
+CLIENT_SECRET = os.environ.get('CLIENT_SECRET')
+AUTH_BASE_URL = os.environ.get('AUTH_BASE_URL')
+DE_EXTERNAL_KEY = os.environ.get('DE_EXTERNAL_KEY')
+
 
 # Validação JWT SFMC
 def validate_jwt(token):
