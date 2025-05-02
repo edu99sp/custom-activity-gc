@@ -42,11 +42,11 @@ def insert_into_de(data):
 
 @app.route('/execute', methods=['POST'])
 def execute():
-    token = request.headers.get('Authorization', '').replace('Bearer ', '')
-    try:
-        validate_jwt(token)
-    except Exception as e:
-        return jsonify({'error': 'JWT invalid', 'detail': str(e)}), 401
+    # token = request.headers.get('Authorization', '').replace('Bearer ', '')
+    #try:
+     #   validate_jwt(token)
+    #except Exception as e:
+     #   return jsonify({'error': 'JWT invalid', 'detail': str(e)}), 401
 
     args = request.json.get('inArguments', [{}])[0]
     contact_key = args.get('ContactKey', '')
