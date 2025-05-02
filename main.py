@@ -15,11 +15,19 @@ DE_EXTERNAL_KEY = os.environ.get('DE_EXTERNAL_KEY')
 
 # Validação JWT SFMC
 def validate_jwt(token):
-    jwk_url = f'{AUTH_BASE_URL}/v2/token/publickey'
-    jwk = requests.get(jwk_url).json()['publicKey']
-    public_key = RSAAlgorithm.from_jwk(jwk)
-    decoded = jwt.decode(token, public_key, algorithms=['RS256'], audience=CLIENT_ID)
+    import base64
+    jwt_secret = os.environ.get("JWT_SECRET")
+    if not jwt_secret:
+        raise ValueError("JWT_SECRET não configurado.")
+
+    decoded = jwt.decode(
+        token,
+        jwt_secret,
+        algorithms=["HS256"],
+        audience=CLIENT_ID
+    )
     return decoded
+
 
 # Obter Token OAuth SFMC
 def get_oauth_token():
